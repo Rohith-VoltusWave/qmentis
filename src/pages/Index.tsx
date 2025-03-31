@@ -1,10 +1,10 @@
 import { useState } from "react";
-import UserStoriesHeader from "@/components/user-stories/UserStoriesHeader";
-import ImportOptions from "@/components/user-stories/ImportOptions";
-import ImportFromJira from "@/components/user-stories/ImportFromJira";
-import ManualCsvWordImport from "@/components/user-stories/ManualCsvWordImport";
-import AudioVideoImport from "@/components/user-stories/AudioVideoImport";
-export const AddUserStory = ({ eventData }: { eventData: any }) => {
+import UserStoriesHeader from "@/ShadcnComponents/user-stories/UserStoriesHeader";
+import ImportOptions from "@/ShadcnComponents/user-stories/ImportOptions";
+import ImportFromJira from "@/ShadcnComponents/user-stories/ImportFromJira";
+import ManualCsvWordImport from "@/ShadcnComponents/user-stories/ManualCsvWordImport";
+import AudioVideoImport from "@/ShadcnComponents/user-stories/AudioVideoImport";
+export const Index = ({ eventData }: { eventData: any }) => {
   console.log("eventData in AddUserStory:", eventData);
 
   // Set "jira" as the default active import option

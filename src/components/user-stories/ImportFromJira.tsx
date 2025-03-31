@@ -1,14 +1,7 @@
-import React, { useState, useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { toast } from "@/hooks/use-toast";
+import React, { useState, useMemo } from 'react';
+import { Button } from '@/ShadcnComponents/ui/button';
+import { Input } from '@/ShadcnComponents/ui/input';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/ShadcnComponents/ui/card';
 
 interface ProjectCard {
   id: string;
@@ -20,7 +13,7 @@ interface ProjectCard {
 }
 
 interface JiraFormData {
-  jiraUrl: string;
+  // jiraUrl: string;
   searchTerm: string;
   selectedProjectId: string | null;
 }
@@ -32,51 +25,48 @@ interface ImportFromJiraProps {
 const ImportFromJira: React.FC<ImportFromJiraProps> = ({ onSubmit }) => {
   // Store all form data in a single JSON object
   const [formData, setFormData] = useState<JiraFormData>({
-    jiraUrl: "https://mycompany.atlassian.net",
-    searchTerm: "",
-    selectedProjectId: null,
+    // jiraUrl: 'https://mycompany.atlassian.net',
+    searchTerm: '',
+    selectedProjectId: null
   });
 
   const [projects, setProjects] = useState<ProjectCard[]>([
     {
-      id: "ec",
-      title: "E-Commerce Platform",
-      code: "ECOM",
+      id: 'ec',
+      title: 'E-Commerce Platform',
+      code: 'ECOM',
       storiesCount: 45,
-      lastUpdated: "2 days ago",
+      lastUpdated: '2 days ago'
     },
     {
-      id: "mb",
-      title: "Mobile App Redesign",
-      code: "MAR",
+      id: 'mb',
+      title: 'Mobile App Redesign',
+      code: 'MAR',
       storiesCount: 32,
-      lastUpdated: "Today",
+      lastUpdated: 'Today'
     },
     {
-      id: "cp",
-      title: "Customer Portal",
-      code: "CP",
+      id: 'cp',
+      title: 'Customer Portal',
+      code: 'CP',
       storiesCount: 28,
-      lastUpdated: "5 days ago",
+      lastUpdated: '5 days ago'
     },
     {
-      id: "ap",
-      title: "Admin Panel",
-      code: "AP",
+      id: 'ap',
+      title: 'Admin Panel',
+      code: 'AP',
       storiesCount: 19,
-      lastUpdated: "1 week ago",
-    },
+      lastUpdated: '1 week ago'
+    }
   ]);
 
-  // Use useMemo to filter projects based on the search term
   const filteredProjects = useMemo(() => {
     if (!formData.searchTerm.trim()) return projects;
 
     return projects.filter(
       (project) =>
-        project.title
-          .toLowerCase()
-          .includes(formData.searchTerm.toLowerCase()) ||
+        project.title.toLowerCase().includes(formData.searchTerm.toLowerCase()) ||
         project.code.toLowerCase().includes(formData.searchTerm.toLowerCase())
     );
   }, [projects, formData.searchTerm]);
@@ -84,55 +74,49 @@ const ImportFromJira: React.FC<ImportFromJiraProps> = ({ onSubmit }) => {
   const handleInputChange = (key: keyof JiraFormData, value: string) => {
     setFormData({
       ...formData,
-      [key]: value,
+      [key]: value
     });
   };
 
   const handleSelectProject = (id: string) => {
-    // Update the projects array to reflect selection state visually
     setProjects(
       projects.map((project) => ({
         ...project,
-        selected: project.id === id,
+        selected: project.id === id
       }))
     );
 
-    // Update the form data with the selected project ID
     setFormData({
       ...formData,
-      selectedProjectId: id,
+      selectedProjectId: id
     });
   };
 
   const handleSubmit = () => {
-    // Get the selected project data to include in the return
-    const selectedProject = projects.find(
-      (p) => p.id === formData.selectedProjectId
-    );
+    const selectedProject = projects.find((p) => p.id === formData.selectedProjectId);
 
     if (!formData.selectedProjectId) {
-      toast({
-        title: "No project selected",
-        description: "Please select a project before submitting",
-        variant: "destructive",
+      alert({
+        title: 'No project selected',
+        description: 'Please select a project before submitting',
+        variant: 'destructive'
       });
-      return null; // Return null instead of undefined
+      return null;
     }
 
-    // Create a single complete data object
     const submissionData = {
-      source: "JIRA",
-      jiraUrl: formData.jiraUrl,
-      project: selectedProject,
+      source: 'JIRA',
+      // jiraUrl: formData.jiraUrl,
+      project: selectedProject
     };
 
-    // Show a toast notification
-    toast({
-      title: "JIRA project submitted",
-      description: `Processing project: ${selectedProject?.title}`,
+    // Show a alert notification
+    alert({
+      title: 'JIRA project submitted',
+      description: `Processing project: ${selectedProject?.title}`
     });
 
-    console.log("Submission data:", submissionData);
+    console.log('Submission data:', submissionData);
 
     if (onSubmit) {
       onSubmit(submissionData);
@@ -144,32 +128,29 @@ const ImportFromJira: React.FC<ImportFromJiraProps> = ({ onSubmit }) => {
   return (
     <Card className="jira-import-card border shadow-sm">
       <CardHeader className="jira-import-header">
-        <CardTitle className="jira-import-title text-xl font-semibold">
-          Import from JIRA
-        </CardTitle>
+        <CardTitle className="jira-import-title text-xl font-semibold">Import from JIRA</CardTitle>
         <p className="jira-import-description text-gray-600 text-sm">
           Select a JIRA project to import user stories
         </p>
       </CardHeader>
       <CardContent className="jira-import-content space-y-6">
-        <div className="jira-url-container">
+        {/* <div className="jira-url-container">
           <label
             htmlFor="jira-url"
-            className="jira-url-label block text-sm font-medium text-gray-700 mb-1"
-          >
+            className="jira-url-label block text-sm font-medium text-gray-700 mb-1">
             JIRA Instance URL
           </label>
           <Input
             id="jira-url"
             value={formData.jiraUrl}
-            onChange={(e) => handleInputChange("jiraUrl", e.target.value)}
+            onChange={(e) => handleInputChange('jiraUrl', e.target.value)}
             placeholder="https://yourcompany.atlassian.net"
             className="jira-url-input w-full"
           />
           <p className="jira-url-help text-xs text-gray-500 mt-1">
             Enter the URL of your JIRA instance
           </p>
-        </div>
+        </div> */}
 
         <div className="projects-container">
           <div className="projects-header flex justify-between items-center mb-2">
@@ -179,7 +160,7 @@ const ImportFromJira: React.FC<ImportFromJiraProps> = ({ onSubmit }) => {
           </div>
           <Input
             value={formData.searchTerm}
-            onChange={(e) => handleInputChange("searchTerm", e.target.value)}
+            onChange={(e) => handleInputChange('searchTerm', e.target.value)}
             placeholder="Search projects..."
             className="projects-search-input w-full mb-4"
           />
@@ -192,21 +173,16 @@ const ImportFromJira: React.FC<ImportFromJiraProps> = ({ onSubmit }) => {
                   onClick={() => handleSelectProject(project.id)}
                   className={`project-card border rounded-md p-4 cursor-pointer transition-all ${
                     project.id === formData.selectedProjectId
-                      ? "border-blue-500 bg-blue-50"
-                      : "hover:border-blue-200"
-                  }`}
-                >
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'hover:border-blue-200'
+                  }`}>
                   <div className="project-card-header flex items-center justify-between mb-2">
                     <div className="project-id bg-gray-100 px-2 py-1 rounded text-xs font-medium">
                       {project.id.toUpperCase()}
                     </div>
-                    <div className="project-code text-xs text-gray-500">
-                      {project.code}
-                    </div>
+                    <div className="project-code text-xs text-gray-500">{project.code}</div>
                   </div>
-                  <h4 className="project-title font-medium text-sm mb-2">
-                    {project.title}
-                  </h4>
+                  <h4 className="project-title font-medium text-sm mb-2">{project.title}</h4>
                   <div className="project-meta flex justify-between text-xs text-gray-500">
                     <span className="project-stories-count">
                       {project.storiesCount} user stories
@@ -223,9 +199,7 @@ const ImportFromJira: React.FC<ImportFromJiraProps> = ({ onSubmit }) => {
               <p className="text-gray-500 font-medium">
                 No projects found matching "{formData.searchTerm}"
               </p>
-              <p className="text-gray-400 text-sm mt-2">
-                Try a different search term
-              </p>
+              <p className="text-gray-400 text-sm mt-2">Try a different search term</p>
             </div>
           )}
         </div>
@@ -237,8 +211,7 @@ const ImportFromJira: React.FC<ImportFromJiraProps> = ({ onSubmit }) => {
         <Button
           className="jira-import-btn"
           onClick={handleSubmit}
-          disabled={!formData.selectedProjectId}
-        >
+          disabled={!formData.selectedProjectId}>
           Import Selected Project
         </Button>
       </CardFooter>
